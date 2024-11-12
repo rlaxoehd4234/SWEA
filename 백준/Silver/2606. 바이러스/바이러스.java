@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -11,17 +12,23 @@ public class Main {
 	public static boolean[] visited;
 	public static int result = 0;
 	
-	public static void dfs(int index) {
+	public static void bfs(int index) {
+		Queue<Integer> qu = new LinkedList<>();
 		visited[index] = true;
-		result +=1;
+		qu.offer(index);
 		
-		for(int i = 1; i <= N; i++) {
-			if(arr[index][i] == 1 && !visited[i])
-			dfs(i);
+		while(!qu.isEmpty()) {
+			int x = qu.poll();			
+			for(int i = 1 ; i <= N; i++) {
+				if(arr[x][i] == 1 && !visited[i]) {
+					qu.offer(i);
+					visited[i] = true;
+					result++;
+				}
+			}
+			
 		}
-		
 	}
-	
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
@@ -34,14 +41,12 @@ public class Main {
 		for(int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());		
+			int y = Integer.parseInt(st.nextToken());
 			arr[x][y] = 1;
 			arr[y][x] = 1;
 		}
-		
-		dfs(1);
-		System.out.println(result-1);
-
+		bfs(1);
+		System.out.println(result);
 	}
 
 }
